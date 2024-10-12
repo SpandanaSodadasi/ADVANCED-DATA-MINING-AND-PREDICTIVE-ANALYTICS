@@ -1,0 +1,375 @@
+---
+title: "Assignment-1"
+author: "Spandana Sodadasi"
+date: "2024-02-18"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NULL)
+```
+
+### Summary:-
+
+### PART-A
+
+1. What is the main purpose of regularization when training predictive models?
+
+Answer: Regularization stands as a significant technique in machine learning which aims to prevent models from becoming overly simplistic or complex which in turn enhances the ability of the model to generalize well on the unseen data. By imposing penalties on the models regularization effectively mitigates the risk of overfitting, wherein models excessively learn from training data, including noise and random fluctuations. Moreover, regularization aids in addressing underfitting by limiting the model from being too complex and ultimately improving the model's capacity to capture essential patterns and make accurate predictions. Overall, regularization plays a pivotal role in fostering model stability and reliability through various methods such as L1 Regularization (Lasso), L2 Regularization (Ridge), and Elastic Net Regularization.
+
+2. What is the role of a loss function in a predictive model? And name two common loss functions for regression models and two common loss functions for classification models. 
+
+Answer: The loss function is also referred to as the cost function which serves as a mathematical representation of the objective in a specific problem. Its primary role within a predictive model is to enhance performance measuring the difference between predicted and actual target values based on a given set of input data. So, the main goal of the predictive model is to minimize this difference between predicted and actual values.
+
+Types of Loss Functions in Regression Models:
+
+(a) Mean Squared Error: MSE is a measure used to assess the average squared difference between predicted values and actual values in a dataset. It is widely used in linear regression models and other regression models with continuous target variables.
+
+$$ MSE = (1/n) Σ(yi - ŷi)^2) $$
+
+where,
+
+\(n\) =  number of samples
+
+\(yi\) = actual value of the target variable for the \(ith\) sample
+
+\(ŷi\) = predicted value of the target variable for the \(ith\) sample
+
+(b) Mean Absolute Error: MAE is another loss function used in regression models. It measures the average absolute difference between the predicted and actual values of the target variable. MAE is less commonly used than MSE because the loss function is not differentiable at zero and it is less sensitive to outliers.
+
+$$ MAE = (1/n) Σ|yi -ŷi| $$
+
+where,
+
+\(n\) =  number of samples
+
+\(yi\) = actual value of the target variable for the \(ith\) sample
+
+\(ŷi\) = predicted value of the target variable for the \(ith\) sample
+
+Types of Loss Functions in Classification Models:
+
+(a) Binary Cross Entropy Loss / Logloss: This loss function is widely used in classification tasks. Cross-entropy loss decreases as the predicted probability approaches the actual label and assess the performance of a classification model predicting probabilities between 0 and 1.
+
+$$ Logloss = \hspace{0.2cm} — (ylog(p)) + (1-y)log(1-p) $$
+
+where,
+
+\(y\) = the actual label (0 or 1)
+
+\(p\) = the predicted probability of the positive class (between 0 and 1)
+
+(b) Hinge Loss: The second most prevalent loss function for classification tasks serving as an alternative to cross-entropy loss is nothing but hinge loss. It is originally designed for evaluating support vector machine (SVM) models, it focuses on penalizing misclassifications and encourages the model to identify a decision boundary that maximizes the margin between the classes.
+
+$$ Hinge\hspace{0.2cm}loss=max(0,1−y⋅f(x)) $$
+
+where,
+
+\(y\) = the true label of the data point \(x\)
+
+\(f(x)\) = the predicted value or score assigned to \(x\) by the model
+
+3. Consider the following scenario. You are building a classification model with many hyperparameters on a relatively small dataset. You will see that the training error is extremely small. Can you fully trust this model? Discuss the reason.
+
+Answer: No, we cannot fully trust this model which has an extremely small training error rate. As the model with an extremely low training error rate could be overfitting the training data which means it's too finely tuned to the noise and fluctuations rather than capturing the underlying pattern that would generalize well to the new data. 
+
+It is obvious to notice a trend of a decrease in training error as we increase the complexity of the model but the complexity of the model depends on the size of the data and the algorithm which we are trying to use to build the model. With small datasets the model tends to memorize the data easily which results in overfitting. Moreover, the presence of many hyperparameters contributes to identifying additional dimensions and aiding the model in learning more intricate details about the data which results to the risk of overfitting.
+
+Overall, a model displaying an exceedingly low training error rate suggests overfitting and may lack generalization to new data. Implementing methods like "cross-validation" and "regularization" could potentially mitigate overfitting and ensure model's efficacy on unseen data.
+
+4. What is the role of the lambda parameter in regularized linear models such as Lasso or Ridge regression models?
+
+Answer: In regularized linear models like Lasso or Ridge regression the lambda parameter also known as the regularization hyperparameter, plays a crucial role in controlling the strength of the regularization applied to the model. Selecting a suitable lambda value is crucial for achieving the optimal balance between model complexity and generalization in regularized linear models which thereby enhances the predictive accuracy on unseen data.
+
+Importance of Lambda:
+
+(i) It determines the degree of shrinkage that is being applied to the coefficients. Higher lambda means more shrinkage which simplifies the model and prevents overfitting.
+
+(ii) Adjusting lambda helps balance bias and variance in the model. Lower lambda values may lead to high variance and low bias, while higher lambda values may result in low variance and high bias.
+
+(iii) Lambda penalizes large coefficients by preventing the model from overfitting.
+
+(iv) In Lasso regression, increasing lambda drives more coefficients to zero, effectively selecting the most important features and simplifying the model.
+
+In Lasso and Ridge regression, the lambda value is usually found through cross-validation, trying different values to see which one works best on a validation set. The chosen lambda depends on the dataset and model complexity.
+
+### PART-B
+
+1. Build a Lasso regression model to predict Sales based on all other attributes ("Price", "Advertising", "Population", "Age", "Income" and "Education"). What is the best value of lambda for such a lasso model?
+
+Answer: As mentioned earlier, Lambda serves as a regularization hyperparameter crucial for regulating the strength of regularization applied to the model. Hence, identifying an optimal value is significant. The provided output presents two lambda values: the minimum and the 1se value. However, we already know that the optimal lambda is always the smaller one. So, we consider the min value to be the best lambda which in this case is 0.00431.
+
+2. What is the coefficient for the price (normalized) attribute in the best model (i.e. model with the optimal lambda)?
+
+Answer: The coefficient for the price attribute when the lambda is set to its optimal value (0.00431) is "-1.35383399".
+
+3. How many attributes remain in the model if lambda is set to 0.01? How that number changes if lambda is increased to 0.1? Do you expect more variables to stay in the model (i.e., to have non-zero coefficients) as we increase lambda? 
+
+Answer: 
+
+(a) All attributes in the model persist when the lambda value is set to 0.01.
+
+(b) With the lambda value set to 0.1, only 4 attributes remain, resulting in the elimination of the "Population" and "Education" attributes. This underscores that as the lambda value increases, more attributes become zero and are consequently eliminated from the model. We can also note that the coefficient values have decreased with the increase in lambda values.
+
+4. Build an elastic-net model with alpha set to 0.6. What is the best value of lambda for such a model? 
+
+Answer: The hybridization of Lasso and Ridge models results in what is known as Elastic Net models. These models exhibit characteristics that partially resemble Lasso and partially resemble Ridge regression. In the elastic net model, there exists a parameter known as alpha, which ranges from 0 to 1. Alpha determines the extent to which the model resembles Lasso or Ridge regression but by default, a slight increase in the alpha value makes it Lasso dominant. As previously mentioned, when computing Lasso, we apply the same code with a minor adjustment to the alpha value i.e., changing it to '0.6'.
+The optimal lambda value for the elastic net model is "0.00654," as it represents the minimum lambda value. When applied, this value does not eliminate any attributes from the model.
+
+***
+
+### Problem Statement:-
+
+### Part A
+
+Please read the following questions carefully and answer each question.
+
+QA1. What is the main purpose of regularization when training predictive models? (10% of total points)
+
+QA2. What is the role of a loss function in a predictive model? And name two common loss functions for regression models and two common loss functions for classification models. (10% of total points)
+
+QA3. Consider the following scenario. You are building a classification model with many hyperparameters on a relatively small dataset. You will see that the training error is extremely small. Can you fully trust this model? Discuss the reason. (10% of total points)
+
+QA4. What is the role of the lambda parameter in regularized linear models such as Lasso or Ridge regression models? (10% of total points)
+
+### Part B
+
+This part of the assignment involves building generalized linear regression models to answer a number of questions. We will use the Carseats dataset that is part of the ISLR package (you need to install and load the library). We may also need the following packages: caret, dplyr and glmnet
+
+QB1. Build a Lasso regression model to predict Sales based on all other attributes ("Price", "Advertising", "Population", "Age", "Income" and "Education"). What is the best value of lambda for such a lasso model? (Hint1: Do not forget to scale your input attributes – you can use the caret preprocess() function to scale and center the data. Hint 2: glment library expect the input attributes to be in the matrix format. You can use the as.matrix() function for converting)
+(20 % of total points)
+
+QB2. What is the coefficient for the price (normalized) attribute in the best model (i.e. model with the optimal lambda)? (15% of total points)
+
+QB3. How many attributes remain in the model if lambda is set to 0.01? How that number changes if lambda is increased to 0.1? Do you expect more variables to stay in the model (i.e., to have non-zero coefficients) as we increase lambda? (15% of total points)
+
+QB4. Build an elastic-net model with alpha set to 0.6. What is the best value of lambda for such a model? (10% of total points)
+
+***
+
+### PART-A
+
+### Questions:-
+
+1. What is the main purpose of regularization when training predictive models?
+
+Regularization stands as a significant technique in machine learning which aims to prevent models from becoming overly simplistic or complex which in turn enhances the ability of the model to generalize well on the unseen data. By imposing penalties on the models regularization effectively mitigates the risk of overfitting, wherein models excessively learn from training data, including noise and random fluctuations. Moreover, regularization aids in addressing underfitting by limiting the model from being too complex and ultimately improving the model's capacity to capture essential patterns and make accurate predictions. Overall, regularization plays a pivotal role in fostering model stability and reliability through various methods such as L1 Regularization (Lasso), L2 Regularization (Ridge), and Elastic Net Regularization.
+
+2. What is the role of a loss function in a predictive model? And name two common loss functions for regression models and two common loss functions for classification models. 
+
+The loss function is also referred to as the cost function which serves as a mathematical representation of the objective in a specific problem. Its primary role within a predictive model is to enhance performance measuring the difference between predicted and actual target values based on a given set of input data. So, the main goal of the predictive model is to minimize this difference between predicted and actual values.
+
+Types of Loss Functions in Regression Models:
+
+(a) Mean Squared Error: MSE is a measure used to assess the average squared difference between predicted values and actual values in a dataset. It is widely used in linear regression models and other regression models with continuous target variables.
+
+$$ MSE = (1/n) Σ(yi - ŷi)^2) $$
+
+where,
+
+\(n\) =  number of samples,
+
+\(yi\) = actual value of the target variable for the \(ith\) sample,
+
+\(ŷi\) = predicted value of the target variable for the \(ith\) sample.
+
+(b) Mean Absolute Error: MAE is another loss function used in regression models. It measures the average absolute difference between the predicted and actual values of the target variable. MAE is less commonly used than MSE because the loss function is not differentiable at zero and it is less sensitive to outliers.
+
+$$ MAE = (1/n) Σ|yi -ŷi| $$
+
+where,
+
+\(n\) =  number of samples,
+
+\(yi\) = actual value of the target variable for the \(ith\) sample,
+
+\(ŷi\) = predicted value of the target variable for the \(ith\) sample.
+
+Types of Loss Functions in Classification Models:
+
+(a) Binary Cross Entropy Loss / Logloss: This loss function is widely used in classification tasks. Cross-entropy loss decreases as the predicted probability approaches the actual label and assesses the performance of a classification model predicting probabilities between 0 and 1.
+
+$$ Logloss = \hspace{0.2cm} — (ylog(p)) + (1-y)log(1-p) $$
+
+where,
+
+\(y\) = the actual label (0 or 1)
+
+\(p\) = the predicted probability of the positive class (between 0 and 1).
+
+(b) Hinge Loss: The second most prevalent loss function for classification tasks serving as an alternative to cross-entropy loss is nothing but hinge loss. It is originally designed for evaluating support vector machine (SVM) models, it focuses on penalizing misclassifications and encourages the model to identify a decision boundary that maximizes the margin between the classes.
+
+$$ Hinge\hspace{0.2cm}loss=max(0,1−y⋅f(x))$$
+
+where,
+
+\(y\) = the true label of the data point \(x\)
+
+\(f(x)\) = the predicted value or score assigned to \(x\) by the model
+
+
+3. Consider the following scenario. You are building a classification model with many hyperparameters on a relatively small dataset. You will see that the training error is extremely small. Can you fully trust this model? Discuss the reason.
+
+No, we cannot fully trust this model which has an extremely small training error rate. As the model with an extremely low training error rate could be overfitting the training data which means it's too finely tuned to the noise and fluctuations rather than capturing the underlying pattern that would generalize well to the new data. 
+
+It is obvious to notice a trend of a decrease in training error as we increase the complexity of the model but the complexity of the model depends on the size of the data and the algorithm which we are trying to use to build the model. With small datasets the model tends to memorize the data easily which results in overfitting. Moreover, the presence of many hyperparameters contributes to identifying additional dimensions and aiding the model in learning more intricate details about the data which results to the risk of overfitting.
+
+Overall, a model displaying an exceedingly low training error rate suggests overfitting and may lack generalization to new data. Implementing methods like "cross-validation" and "regularization" could potentially mitigate overfitting and ensure model's efficacy on unseen data.
+
+4. What is the role of the lambda parameter in regularized linear models such as Lasso or Ridge regression models?
+
+In regularized linear models like Lasso or Ridge regression the lambda parameter also known as the regularization hyperparameter, plays a crucial role in controlling the strength of the regularization applied to the model. Selecting a suitable lambda value is crucial for achieving the optimal balance between model complexity and generalization in regularized linear models which thereby enhances the predictive accuracy on unseen data.
+
+Importance of Lambda:
+
+(i) It determines the degree of shrinkage that is being applied to the coefficients. Higher lambda means more shrinkage which simplifies the model and prevents overfitting.
+
+(ii) Adjusting lambda helps balance bias and variance in the model. Lower lambda values may lead to high variance and low bias, while higher lambda values may result in low variance and high bias.
+
+(iii) Lambda penalizes large coefficients by preventing the model from overfitting.
+
+(iv) In Lasso regression, increasing lambda drives more coefficients to zero, effectively selecting the most important features and simplifying the model.
+
+In Lasso and Ridge regression, the lambda value is usually found through cross-validation, trying different values to see which one works best on a validation set. The chosen lambda depends on the dataset and model complexity.
+
+### PART-B
+
+1.Loading the required libraries.
+```{r}
+library(dplyr, warn.conflicts = FALSE)
+library(ISLR, warn.conflicts = FALSE)
+library(glmnet, warn.conflicts = FALSE)
+library(caret, warn.conflicts = FALSE)
+library(tinytex, warn.conflicts = FALSE)
+```
+
+2.Loading and reading the dataset.
+```{r}
+Data <- Carseats
+dim(Data)
+```
+
+3.Selecting a subset of the data.
+```{r}
+Carseats_Filtered <- Data %>% select("Sales", "Price", "Advertising", "Population", "Age", "Income", "Education")
+head(Carseats_Filtered)
+```
+
+4.Checking if there are any missing values.
+```{r}
+Missing_Values <- colSums(is.na(Carseats_Filtered))
+Missing_Values
+```
+
+There are no missing values in any of the variables.
+
+5.Normalizing the data.
+```{r}
+set.seed(123)
+norm.values <- preProcess(Carseats_Filtered[, -1], method=c("center", "scale"))
+norm.df <- predict(norm.values, Carseats_Filtered)
+```
+
+6.Transforming the data by converting the set of features into one vector and target into another vector.
+```{r}
+Feature  <- as.matrix(norm.df[2:7])
+Target <- norm.df[[1]]
+```
+
+### Questions:-
+
+1. Build a Lasso regression model to predict Sales based on all other attributes ("Price", "Advertising", "Population", "Age", "Income" and "Education"). What is the best value of lambda for such a lasso model?
+
+#Plotting a basic lasso regression without setting any specific alpha condition.
+```{r}
+fit = glmnet(Feature, Target)
+plot(fit)
+```
+
+The graph above illustrates the relationship between L1 norm (representing Lasso) on the x-axis and coefficients on the y-axis. At the top of the graph, the number of attributes in the dataset is displayed. As the L1 norm value increases, the number of remaining attributes in the model decreases, with the number of attributes reaching zero increasing correspondingly. Notably, when the L1 norm reaches 3.5, the final variable becomes zero, signifying its importance in the dataset. This graphical representation highlights how Lasso aids in feature selection by visually demonstrating the significance of variables.
+
+#Building  Lasso regression model to predict sales using all other attributes with alpha value set to '1'.
+```{r}
+set.seed(123)
+fit_lasso = cv.glmnet(Feature, Target, data=norm.df, nfolds=5, alpha=1)
+fit_lasso
+```
+
+As mentioned earlier, Lambda serves as a regularization hyperparameter crucial for regulating the strength of regularization applied to the model. Hence, identifying an optimal value is significant. The provided output presents two lambda values: the minimum and the 1se value. However, we already know that the optimal lambda is always the smaller one. So, we consider the min value to be the best lambda which in this case is 0.00431.
+
+#Checking the number of attributes left in the model using the lambda values calculated above.
+```{r}
+#Looking at the coefficients when lambda is set to 0.00431
+coef(fit_lasso, s="lambda.min")
+#Looking at the coefficients when lambda is set to 0.21428
+coef(fit_lasso, s="lambda.1se")
+```
+
+#Plotting the model.
+```{r}
+plot(fit_lasso)
+```
+
+Therefore, we notice that with the minimum lambda value there are 6 variables present, but with a slight increase in lambda, only 4 variables remain in the model.
+
+#The Optimal (Min) and 1SE lambda values with respect to the above graph.
+```{r}
+#The Optimal (Min) and 1SE lambda values with respect to the above graph
+
+log_lambda_min <- log(0.00431)
+log_lambda_min
+
+log_lambda_1se <- log(0.21428)
+log_lambda_1se
+```
+
+The log minimum lambda value is -5.446817 and the log 1se lambda value is -1.540472.
+
+2. What is the coefficient for the price (normalized) attribute in the best model (i.e. model with the optimal lambda)?
+```{r}
+coef(fit_lasso, s="lambda.min")
+```
+
+The coefficient for the price attribute when the lambda is set to its optimal value (0.00431) is "-1.35383399".
+
+3. How many attributes remain in the model if lambda is set to 0.01? How that number changes if lambda is increased to 0.1? Do you expect more variables to stay in the model (i.e., to have non-zero coefficients) as we increase lambda? 
+```{r}
+#lambda = 0.01
+coef(fit_lasso,s=0.01)
+```
+
+All attributes in the model persist when the lambda value is set to 0.01.
+
+```{r}
+#lambda = 0.1
+coef(fit_lasso,s=0.1)
+```
+
+With the lambda value set to 0.1, only 4 attributes remain, resulting in the elimination of the "Population" and "Education" attributes. This underscores that as the lambda value increases, more attributes become zero and are consequently eliminated from the model. We can also note that the coefficient values have decreased with the increase in lambda values.
+
+4. Build an elastic-net model with alpha set to 0.6. What is the best value of lambda for such a model? 
+```{r}
+set.seed(123)
+elastic_net <- cv.glmnet(Feature, Target, data=norm.df, nfolds=5, alpha=0.6)
+elastic_net
+```
+
+The hybridization of Lasso and Ridge models results in what is known as Elastic Net models. These models exhibit characteristics that partially resemble Lasso and partially resemble Ridge regression. In the elastic net model, there exists a parameter known as alpha, which ranges from 0 to 1. Alpha determines the extent to which the model resembles Lasso or Ridge regression but by default, a slight increase in the alpha value makes it Lasso dominant. As previously mentioned, when computing Lasso, we apply the same code with a minor adjustment to the alpha value i.e., changing it to '0.6'.
+
+#Plotting the model.
+```{r}
+plot(elastic_net)
+```
+
+Given that a slight increase in the alpha value renders Lasso dominant, we may observe a similar effect when lambda values vary slightly. Therefore, with a minimum lambda value of 0.00654, there are 6 variables present, whereas with the 1se value of 0.29649, only 4 variables remain.
+
+#Looking at the coefficients when lambda is set to 0.00654.
+```{r}
+coef(elastic_net, s="lambda.min") 
+```
+
+The optimal lambda value for the elastic net model is "0.00654," as it represents the minimum lambda value. When applied, this value does not eliminate any attributes from the model.
+
+

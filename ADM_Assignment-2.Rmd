@@ -1,0 +1,336 @@
+---
+title: "Assignment-2"
+author: "Spandana Sodadasi"
+date: "2024-04-06"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NULL)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+### Summary:-
+
+### PART-A
+
+1. What is the key idea behind bagging? Can bagging deal both with high variance (overfitting) and high bias (underfitting)?             
+
+Answer: Bagging is also called as 'Bootstrap Aggregation'. It is an ensemble machine learning algorithm. It involves creating multiple subsets of the original training data with each subset being selected randomly with replacement which are also called as 'bootstrap samples'. For each of these subsets, a simple model, often a decision tree that hasn't been pruned to simplify it is trained. These models are known as weak learners. Therefore by combining these models bagging produces a final and a more accurate prediction. This method can be repeated K times until the combined model doesn't get any better at predicting, according to tests on a validation dataset. This approach of combining many simple models often outperforms a single complex model.
+
+Bagging is an effective way to reduce overfitting or high variance by training multiple models on data subsets and averaging their predictions. This process helps to balance out individual errors, resulting in a more reliable overall prediction. However, it cannot address situations where individual classifiers are underfitted or exhibit high bias as the ensemble inherits these limitations. In ensemble models, the goal is to utilize the strengths of well-performing models, but if individual models are inherently biased, combining them would not rectify this issue. Therefore, while bagging can handle high variance by reducing overfitting, it is ineffective in addressing high bias or underfitting.
+
+2. Why bagging models are computationally more efficient when compared to boosting models with the same number of weak learners?
+
+Answer: Bagging and Boosting are different ensemble machine learning techniques that are utilized to improve model performance. Bagging involves training multiple instances of a single model on different random subsets of the training data and then combining their predictions through averaging or voting. In contrary, Boosting systematically teaches weak learner where each new learner corrects the errors made by the previous ones in a sequential manner.
+
+However, Bagging models are computationally more efficient when compared to boosting models with the same number of weak learners because of the following reasons:
+
+(i) Bagging enhances model accuracy through parallel training of multiple instances on various data subsets which offers faster computation and reduced sensitivity to data order. In contrast, Boosting utilizes sequential learner training to rectify past errors which ultimately enhances prediction accuracy but increases complexity and longer training duration.
+
+(ii) Also as discussed earlier, Bagging reduces overfitting by training multiple models on data subsets and averaging their predictions. Instead Boosting can sometimes result in overfitting as it emphasizes data patterns to rectify errors made by earlier learners.
+
+3. James is thinking of creating an ensemble model to predict whether a given stock will go up or down in the next week. He has trained several decision tree models but each model is not performing any better than a random model. The models are also very similar to each other. Do you think creating an ensemble model by combining these tree models can boost the
+performance? Discuss your answer.
+
+No, creating an ensemble model by combining the given decision tree models cannot boost the performance for the following reasons:
+
+(i) The primary requirement for building an ensemble model is that the individual models must outperform a random model, indicating some predictive capability. This allows the ensemble to combine the strengths of each model for improved predictions.  However, if a decision tree performs no better than a random model then merging them may not lead to enhanced model performance.
+
+(ii) The second requirement for building an ensemble model is diversity among base learners. If all models produce similar outputs then combining them will lead to redundancy as it provides no unique insights beyond what individual models offer.
+
+Therefore, merging these decision tree models is unlikely to enhance performance. James should look for models that are more diverse and that perform better than a random model.
+
+4. Consider the following Table that classifies some objects into two classes of edible (+) and non-edible (-), based on some characteristics such as the object color, size and shape. What would be the Information gain for splitting the dataset based on the “Size” attribute?
+
+Answer: Information Gain is a measure to quantify the reduction of Entropy. It tells us how important a given attribute of the feature vectors is. So, we use it to decide the ordering of attributes in the nodes of a decision tree. 
+The Information Gain of the dataset can be calculated by using the formula written below: 
+
+                        Information Gain = Entropy(Parent) - [Average Entropy(Children)]
+
+Entropy is the level of uncertainty present in the data. The entropy of the dataset can be calculated by:
+ 
+                                  Entropy(S) = −p(+)log2p(+)−p(−)log2p(−)
+ 
+where, 
+
+\(S\) is the sample training data
+
+\(p(+)\) is the proportion of positive samples in S i.e., edible objects
+
+\(p(-)\) is the proportion of negative samples in S i.e., non-edible objects
+
+#Calculating the Parent entropy by using the Entropy formula on the edible and non-edible objects.
+```{r}
+Parent_entropy <- - (9/16) * log2(9/16) - (7/16) * log2(7/16)
+Parent_entropy
+```
+
+#Calculating the Children entropy by splitting the size attribute.
+```{r}
+Child_entropy_large <- - (3/8) * log2(3/8) - (5/8) * log2(5/8)
+Child_entropy_large
+Child_entropy_small <- - (6/8) * log2(6/8) - (2/8) * log2(2/8)
+Child_entropy_small
+```
+
+#Calculating the Information Gain.
+```{r}
+Information_Gain <- Parent_entropy - (8/16) * Child_entropy_large - (8/16) * Child_entropy_small
+round(Information_Gain, digits = 4)
+```
+
+The Information Gain is '0.1058'.
+
+5. Why is it important that the m parameter (number of attributes available at each split) to be optimally set in random forest models? Discuss the implications of setting this parameter too small or too large.
+
+Answer: In random forest models, the parameter "m" plays a critical role by determining the number of features considered at each split. Setting the "m" parameter too high can lead to overfitting, where the model captures noise instead of genuine patterns. This results in strong performance on training data but poor performance on test data.
+Setting the parameter too low may lead to inadequate feature representation which may lead to model's inability to capture the complexity of the data effectively or underfitting, resulting in poor performance on both training and test data. 
+
+Therefore, finding the optimal balance for the "m" parameter is crucial as it must include enough features to detect data patterns. The ideal "m" value varies by dataset and requires experimentation and cross-validation for determination.
+
+
+### PART-B
+
+1. Build a decision tree regression model to predict Sales based on all other attributes ("Price", "Advertising", "Population", "Age", "Income" and "Education"). Which attribute is used at the top of the tree (the root node) for splitting?
+
+Answer: The attribute used at the root node of the tree for splitting is Price, followed by decision nodes for Advertising and Age.
+
+
+2. Consider the following input: Sales=9, Price=6.54, Population=124, Advertising=0, Age=76, Income= 110, Education=10. What will be the estimated Sales for this record using the decision tree model?
+
+Answer: The Estimated Sales for this record using the decision tree model is '9.59'.
+
+3. Use the caret function to train a random forest (method=’rf’) for the same dataset. Use the caret default settings. By default, caret will examine the “mtry” values of 2,4, and 6. Recall that mtry is the number of attributes available for splitting at each splitting node. Which mtry value gives the best performance? (Make sure to set the random number generator seed to 123)
+
+Answer: The random forest model performs best with an mtry value of '2', as it yields the smallest RMSE of 2.405819 when compared to values of 4 and 6.
+
+4. Customize the search grid by checking the model’s performance for mtry values of 2, 3 and 5 using 3 repeats of 5-fold cross validation.
+
+Answer: After customizing the search grid, the mtry value of '3' produces the smallest RMSE value of 2.401365 indicating the best performance. 
+
+***
+
+### Problem Statement:-
+
+### Part A
+
+QA1. What is the key idea behind bagging? Can bagging deal both with high variance (overfitting) and high bias (underfitting)? (10% of total points)
+
+QA2. Why bagging models are computationally more efficient when compared to boosting models with the same number of weak learners? (5% of total points)
+
+QA3. James is thinking of creating an ensemble model to predict whether a given stock will go up or down in the next week. He has trained several decision tree models but each model is not performing any better than a random model. The models are also very similar to each other. Do you think creating an ensemble model by combining these tree models can boost the
+performance? Discuss your answer. (5% of total points)
+
+QA4. Consider the following Table that classifies some objects into two classes of edible (+) and non-edible (-), based on some characteristics such as the object color, size and shape. What would be the Information gain for splitting the dataset based on the “Size” attribute? (15% of total points)
+
+QA5. Why is it important that the m parameter (number of attributes available at each split) to be optimally set in random forest models? Discuss the implications of setting this parameter too small or too large. (5% of total points)
+
+### Part B
+
+QB1. Build a decision tree regression model to predict Sales based on all other attributes ("Price", "Advertising", "Population", "Age", "Income" and "Education"). Which attribute is used at the top of the tree (the root node) for splitting? Hint: you can either plot () and text() functions or use the summary() function to see the decision tree rules. (15% of total points)
+
+QB2. Consider the following input:
+
+• Sales=9
+
+• Price=6.54
+
+• Population=124
+
+• Advertising=0
+
+• Age=76
+
+• Income= 110
+
+• Education=10
+
+What will be the estimated Sales for this record using the decision tree model? (15% of total points)
+
+QB3. Use the caret function to train a random forest (method=’rf’) for the same dataset. Use the caret default settings. By default, caret will examine the “mtry” values of 2,4, and 6. Recall that mtry is the number of attributes available for splitting at each splitting node. Which mtry value gives the best performance? (Make sure to set the random number generator seed to 123) (15% of total points)
+
+QB4. Customize the search grid by checking the model’s performance for mtry values of 2, 3 and 5 using 3 repeats of 5-fold cross validation. (15% of total points)
+
+***
+
+### PART-A
+
+1. What is the key idea behind bagging? Can bagging deal both with high variance (overfitting) and high bias (underfitting)?                    
+
+Bagging is also called as 'Bootstrap Aggregation'. It is an ensemble machine learning algorithm. It involves creating multiple subsets of the original training data with each subset being selected randomly with replacement which are also called as 'bootstrap samples'. For each of these subsets, a simple model, often a decision tree that hasn't been pruned to simplify it is trained. These models are known as weak learners. Therefore by combining these models bagging produces a final and a more accurate prediction. This method can be repeated K times until the combined model doesn't get any better at predicting, according to tests on a validation dataset. This approach of combining many simple models often outperforms a single complex model.
+
+Bagging is an effective way to reduce overfitting or high variance by training multiple models on data subsets and averaging their predictions. This process helps to balance out individual errors, resulting in a more reliable overall prediction. However, it cannot address situations where individual classifiers are underfitted or exhibit high bias as the ensemble inherits these limitations. In ensemble models, the goal is to utilize the strengths of well-performing models, but if individual models are inherently biased, combining them would not rectify this issue. Therefore, while bagging can handle high variance by reducing overfitting, it is ineffective in addressing high bias or underfitting.
+
+2. Why bagging models are computationally more efficient when compared to boosting models with the same number of weak learners?
+
+Bagging and Boosting are different ensemble machine learning techniques that are utilized to improve model performance. Bagging involves training multiple instances of a single model on different random subsets of the training data and then combining their predictions through averaging or voting. In contrary, Boosting systematically teaches weak learner where each new learner corrects the errors made by the previous ones in a sequential manner.
+
+However, Bagging models are computationally more efficient when compared to boosting models with the same number of weak learners because of the following reasons:
+
+(i) Bagging enhances model accuracy through parallel training of multiple instances on various data subsets which offers faster computation and reduced sensitivity to data order. In contrast, Boosting utilizes sequential learner training to rectify past errors which ultimately enhances prediction accuracy but increases complexity and longer training duration.
+
+(ii) Also as discussed earlier, Bagging reduces overfitting by training multiple models on data subsets and averaging their predictions. Instead Boosting can sometimes result in overfitting as it emphasizes data patterns to rectify errors made by earlier learners.
+
+3. James is thinking of creating an ensemble model to predict whether a given stock will go up or down in the next week. He has trained several decision tree models but each model is not performing any better than a random model. The models are also very similar to each other. Do you think creating an ensemble model by combining these tree models can boost the
+performance? Discuss your answer.
+
+No, creating an ensemble model by combining the given decision tree models cannot boost the performance for the following reasons:
+
+(i) The primary requirement for building an ensemble model is that the individual models must outperform a random model, indicating some predictive capability. This allows the ensemble to combine the strengths of each model for improved predictions.  However, if a decision tree performs no better than a random model then merging them may not lead to enhanced model performance.
+
+(ii) The second requirement for building an ensemble model is diversity among base learners. If all models produce similar outputs then combining them will lead to redundancy as it provides no unique insights beyond what individual models offer.
+
+Therefore, merging these decision tree models is unlikely to enhance performance. James should look for models that are more diverse and that perform better than a random model.
+
+4. Consider the following Table that classifies some objects into two classes of edible (+) and non-edible (-), based on some characteristics such as the object color, size and shape. What would be the Information gain for splitting the dataset based on the “Size” attribute?
+
+```{r}
+library(kableExtra, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+Data_table <- matrix(c("Yellow" ,"Yellow", "Green", "Green", "Yellow", "Yellow", "Yellow", 
+                       "Yellow", "Green", "Yellow", "Yellow", "Yellow", "Yellow", "Yellow", 
+                       "Yellow", "Yellow", "Small", "Small", "Small", "Large", "Large", 
+                       "Small", "Small", "Small", "Small", "Large", "Large", "Large", 
+                       "Large", "Large" ,"Small", "Large", "Round",  "Round", "Irregular",
+                       "Irregular", "Round", "Round", "Round", "Round", "Round", "Round",
+                       "Round", "Round", "Round", "Round", "Irregular", "Irregular", 
+                       "++", "−−", "++", "−−", "++", "++",  "++", "++", "−−", "−−", "++",
+                       "−−", "−−", "−−", "++" ,"++" ), ncol=4, byrow=F)
+colnames(Data_table) <- c("Color", "Size","Shape","Edible?")
+Data_table <- as.table(Data_table)
+
+Data_table %>%
+  kable(align = "c", format = "html", row.names = FALSE) %>%
+  kable_styling(bootstrap_options = "bordered", full_width = TRUE) 
+```
+
+Information Gain is a measure to quantify the reduction of Entropy. It tells us how important a given attribute of the feature vectors is. So, we use it to decide the ordering of attributes in the nodes of a decision tree.
+
+The Information Gain of the dataset can be calculated by using the formula written below: 
+
+                        Information Gain = Entropy(Parent) - [Average Entropy(Children)]
+
+Entropy is the level of uncertainty present in the data. The entropy of the dataset can be calculated by:
+ 
+                                  Entropy(S) = −p(+)log2p(+)−p(−)log2p(−)
+ 
+where, 
+
+\(S\) is the sample training data
+
+\(p(+)\) is the proportion of positive samples in S i.e., edible objects
+
+\(p(-)\) is the proportion of negative samples in S i.e., non-edible objects
+
+#Calculating the Parent entropy by using the Entropy formula on the edible and non-edible objects.
+```{r}
+Parent_entropy <- - (9/16) * log2(9/16) - (7/16) * log2(7/16)
+Parent_entropy
+```
+
+#Calculating the Children entropy by splitting the size attribute.
+```{r}
+Child_entropy_large <- - (3/8) * log2(3/8) - (5/8) * log2(5/8)
+Child_entropy_large
+Child_entropy_small <- - (6/8) * log2(6/8) - (2/8) * log2(2/8)
+Child_entropy_small
+```
+
+#Calculating the Information Gain.
+```{r}
+Information_Gain <- Parent_entropy - (8/16) * Child_entropy_large - (8/16) * Child_entropy_small
+round(Information_Gain, digits = 4)
+```
+
+The Information Gain is '0.1058'.
+
+5. Why is it important that the m parameter (number of attributes available at each split) to be optimally set in random forest models? Discuss the implications of setting this parameter too small or too large.
+
+In random forest models, the parameter "m" plays a critical role by determining the number of features considered at each split. Setting the "m" parameter too high can lead to overfitting, where the model captures noise instead of genuine patterns. This results in strong performance on training data but poor performance on test data.
+Setting the parameter too low may lead to inadequate feature representation which may lead to model's inability to capture the complexity of the data effectively or underfitting, resulting in poor performance on both training and test data. 
+
+Therefore, finding the optimal balance for the "m" parameter is crucial as it must include enough features to detect data patterns. The ideal "m" value varies by dataset and requires experimentation and cross-validation for determination.
+
+### PART-B
+
+1.Loading the required libraries.
+```{r}
+library(dplyr, warn.conflicts = FALSE)
+library(ISLR, warn.conflicts = FALSE)
+library(caret, warn.conflicts = FALSE)
+library(rattle, warn.conflicts = FALSE)
+library(rpart, warn.conflicts = FALSE)
+library(rpart.plot, warn.conflicts = FALSE)
+library(randomForest, warn.conflicts = FALSE)
+```
+
+2.Loading and reading the dataset.
+```{r}
+Dataset <- Carseats
+dim(Dataset)
+```
+
+3.Selecting a subset of the data.
+```{r}
+Carseats_Filtered <- Dataset %>% select("Sales", "Price", "Advertising", "Population", 
+                                        "Age", "Income", "Education")
+head(Carseats_Filtered)
+```
+
+4.Checking if there are any missing values.
+```{r}
+Missing_Values <- colSums(is.na(Carseats_Filtered))
+Missing_Values
+```
+
+There are no missing values in any of the variables.
+
+### Questions:-
+
+1. Build a decision tree regression model to predict Sales based on all other attributes ("Price", "Advertising", "Population", "Age", "Income" and "Education"). Which attribute is used at the top of the tree (the root node) for splitting?
+```{r}
+Model_1 =rpart(Sales~., data= Carseats_Filtered, method='anova')
+summary(Model_1)
+rpart.plot(Model_1)
+```
+
+
+The attribute used at the root node of the tree for splitting is Price, followed by decision nodes for Advertising and Age.
+
+
+2. Consider the following input: Sales=9, Price=6.54, Population=124, Advertising=0, Age=76, Income= 110, Education=10. What will be the estimated Sales for this record using the decision tree model?
+```{r}
+Data = data.frame(Sales=9, Price = 6.54, Population = 124, Advertising = 0, Age = 76, Income = 110, Education = 10)
+Sales_Value = predict(Model_1, Data)
+cat(round(Sales_Value, digits = 2))
+```
+
+The Estimated Sales for this record using the decision tree model is '9.59'. 
+
+3. Use the caret function to train a random forest (method=’rf’) for the same dataset. Use the caret default settings. By default, caret will examine the “mtry” values of 2,4, and 6. Recall that mtry is the number of attributes available for splitting at each splitting node. Which mtry value gives the best performance? (Make sure to set the random number generator seed to 123)
+```{r}
+set.seed(123)
+Model_2<- train(Sales~., data=Carseats_Filtered, method= "rf")
+print(Model_2)
+plot(Model_2)
+```
+
+The random forest model performs best with an mtry value of '2', as it yields the smallest RMSE of 2.405819 when compared to values of 4 and 6.
+
+4. Customize the search grid by checking the model’s performance for mtry values of 2, 3 and 5 using 3 repeats of 5-fold cross validation.
+```{r}
+set.seed(123)
+control <- trainControl(method = "repeatedcv", search = "grid", number = 5, repeats = 3)
+Model_3 <- train(Sales~., data = Carseats_Filtered, method = "rf", trControl = control, 
+                 tuneGrid = expand.grid(mtry=c(2,3,5))) 
+print(Model_3)
+plot(Model_3)
+```
+
+After customizing the search grid, the mtry value of '3' produces the smallest RMSE value of 2.401365 indicating the best performance.
+
+
